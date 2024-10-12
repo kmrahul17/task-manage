@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from model import estimate_time
+import os
 
 app = Flask(__name__)
 
@@ -20,4 +21,4 @@ def estimate():
     return jsonify({'estimated_time': estimated_time})
 
 if __name__ == '__main__':
-    app.run(port=5001)
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
