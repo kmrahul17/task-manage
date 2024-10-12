@@ -47,6 +47,12 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/estimate', estimateRoutes);
 app.use('/api/ai-estimate', aiEstimateRoutes);
 
+// Add this near your other route definitions
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'OK', message: 'Server is healthy' });
+});
+
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
