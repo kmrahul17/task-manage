@@ -10,13 +10,31 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Remove this line as cors is already imported above
+// const cors = require('cors');
+
 const corsOptions = {
-     origin: process.env.FRONTEND_URL || 'http://localhost:3001',
-     credentials: true,
-     optionsSuccessStatus: 200
+  origin: ['https://cute-gnome-1447e8.netlify.app', 'http://localhost:3001'],
+  credentials: true,
+  optionsSuccessStatus: 200
 };
 
-app.use(cors());
+app.use(cors(corsOptions));
+
+// Add this before your routes
+app.options('*', cors(corsOptions));
+
+// Add this middleware to handle preflight requests and set headers
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://cute-gnome-1447e8.netlify.app');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 app.use(express.json());
 
 mongoose.connect(process.env.MONGODB_URI, {
